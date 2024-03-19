@@ -1,4 +1,4 @@
-![Build Status](https://jenkins.shodan.fyi/buildStatus/icon?job=MultiUserMultiTouch)
+<a href='https://jenkins.shodan.fyi/job/MultiUserMultiTouch/'><img src='https://jenkins.shodan.fyi/buildStatus/icon?job=MultiUserMultiTouch'></a>
 # Multi User Multi Touch
 ## About
 
