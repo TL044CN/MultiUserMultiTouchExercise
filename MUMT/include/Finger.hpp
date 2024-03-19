@@ -58,6 +58,13 @@ public:
     const cv::Point& lastPosition() const;
 
     /**
+     * @brief returns the ID of the Finger
+     * 
+     * @return const uint64_t the ID of the Finger
+     */
+    const uint64_t id() const;
+
+    /**
      * @brief Cheks if 2 fingers have the same ID
      * 
      * @param other the other Finger

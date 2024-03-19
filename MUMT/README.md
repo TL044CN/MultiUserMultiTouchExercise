@@ -14,7 +14,7 @@ powered by OpenCV
 ### Dependencies
 
 - OpenCV 4
-- [TUIO 2.0](../vendor/TUIO/README.md)
+- [TUIO 1.1](../vendor/TUIO/README.md)
 
 ## Alpha API
 

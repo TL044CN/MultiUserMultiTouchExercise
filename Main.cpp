@@ -7,8 +7,6 @@
 
 #include <Tracker.hpp>
 
-#include <TUIOServer.hpp>
-
 int main() {
 
     cv::VideoCapture capture("figures/video.AVI");

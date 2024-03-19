@@ -1,4 +1,6 @@
 
+set(MUMT_INCLUDE_DIRS include)
+
 add_library(MUMT
     source/Helpers.cpp
     source/Finger.cpp
@@ -7,7 +9,6 @@ add_library(MUMT
     source/TUIOServerAdapter.cpp
 )
 
-set(MUMT_INCLUDE_DIRS include)
 
 target_include_directories(MUMT
 PUBLIC
