@@ -1,0 +1,8 @@
+build
+vendor/*
+!vendor/TUIO
+.vscode
+docs/*
+!docs/README.md
+
+figures/*
