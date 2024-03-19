@@ -1,11 +1,9 @@
 #include "../include/TUIOServerAdapter.hpp"
 #include "TuioTime.h"
 
-TUIOServerAdapter::TUIOServerAdapter()
-:TUIOServerAdapter(std::make_shared<TUIO::OscSender>()) {}
 
-TUIOServerAdapter::TUIOServerAdapter(std::shared_ptr<TUIO::OscSender> udpSender)
-: mServer(std::make_unique<TUIO::TuioServer>(udpSender.get())) {
+TUIOServerAdapter::TUIOServerAdapter()
+: mServer(std::make_unique<TUIO::TuioServer>()) {
     static bool initSession = true;
     if(initSession){
         TUIO::TuioTime::initSession();
@@ -16,8 +14,9 @@ TUIOServerAdapter::TUIOServerAdapter(std::shared_ptr<TUIO::OscSender> udpSender)
 void TUIOServerAdapter::transmitFingers(const QuadTree& tree) {
     std::vector<TUIO::TuioCursor*> cursors;
     mServer->initFrame(TUIO::TuioTime::getSessionTime());
-    for(const auto& weakFinger : tree) {
-        auto finger = weakFinger.lock();
+    for(const auto& maybeFingerRef : tree) {
+        if(!maybeFingerRef.has_value()) continue;
+        auto& finger = maybeFingerRef->get();
         auto& [xPos, yPos] = finger->lastPosition();
         TUIO::TuioCursor* cursor = new TUIO::TuioCursor(finger->id(),0 , xPos, yPos);
         cursors.push_back(cursor);

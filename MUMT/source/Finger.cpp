@@ -5,16 +5,19 @@
 
 uint64_t Finger::sMaxID = 0;
 
-Finger::Finger(cv::Point origin): mID(sMaxID++) {
-    mPreviousPoints.push_back(origin);
-}
-
-void Finger::addNewPosition(cv::Point point, cv::RotatedRect ellipse) {
-    mPreviousPoints.push_back(point);
+Finger::Finger(const cv::RotatedRect& ellipse)
+    : mID(sMaxID++) {
+    mPreviousPoints.push_back(ellipse.center);
     mCurrentEllipse = ellipse;
 }
 
-double Finger::getDistanceTo(cv::Point point) const {
+void Finger::addNewPosition(cv::RotatedRect ellipse) {
+    mPreviousPoints.push_back(ellipse.center);
+    mCurrentEllipse = ellipse;
+    mMark = 0;
+}
+
+double Finger::getDistanceTo(const cv::Point2f& point) const {
     auto& lastPoint = mPreviousPoints.back();
     auto vec = point - lastPoint;
     return sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -28,20 +31,36 @@ void Finger::draw(cv::Mat& destination) const {
             cv::line(destination, a, b, cv::Scalar(200, 200, 0));
         }
 
-    cv::Point location = mPreviousPoints.back() + cv::Point(2, 2);
+    cv::Point location = mPreviousPoints.back() + cv::Point2f(2, 2);
 
     cv::drawMarker(destination, mPreviousPoints.back(), cv::Scalar(255, 0, 0), cv::MARKER_CROSS);
     cv::ellipse(destination, mCurrentEllipse, cv::Scalar(0, 255, 0));
     cv::putText(destination,
         std::to_string(mID),
-        mPreviousPoints.back() + cv::Point(3, 13),
+        mPreviousPoints.back() + cv::Point2f(3, 13),
         cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 0, 0), 1
     );
 
 }
 
-const cv::Point& Finger::lastPosition() const {
+const cv::Point2f& Finger::lastPosition() const {
     return mPreviousPoints.back();
+}
+
+const uint64_t Finger::id() const {
+    return mID;
+}
+
+const uint8_t Finger::getAge() const {
+    return mMark;
+}
+
+void Finger::resetAge() {
+    mMark = 0;
+}
+
+void Finger::incrementAge() {
+    ++mMark;
 }
 
 bool Finger::operator==(const Finger& other) const {

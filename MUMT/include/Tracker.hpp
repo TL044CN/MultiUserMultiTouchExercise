@@ -1,11 +1,14 @@
 #ifndef TT_TRACKER_HPP
 #define TT_TRACKER_HPP
 
-#include <opencv2/opencv.hpp>
-#include <Finger.hpp>
+#include "opencv2/opencv.hpp"
+#include "Finger.hpp"
+#include "QuadTree.hpp"
+
 #include <vector>
 
-constexpr double ceMaxFingerDist = 29;
+constexpr double ceMaxFingerDist = 35;
+constexpr uint64_t ceMaxAge = 2;
 
 /**
  * @brief Core of the Tracking system
@@ -14,7 +17,8 @@ constexpr double ceMaxFingerDist = 29;
 class Tracker {
 private:
     cv::Mat mBackgroundImage;
-    std::vector<Finger> mFingers;
+    QuadTree mFingers;
+//    std::vector<Finger> mFingers;
 
 public:
     /**

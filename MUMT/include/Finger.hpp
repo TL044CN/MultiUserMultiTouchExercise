@@ -15,24 +15,26 @@ private:
     static uint64_t sMaxID;
     uint64_t mID;
 
-    std::vector<cv::Point> mPreviousPoints;
+    std::vector<cv::Point2f> mPreviousPoints;
     cv::RotatedRect mCurrentEllipse;
+
+    uint8_t mMark = 0;
 
 public:
     /**
      * @brief Construct a new Finger object
      *
-     * @param origin the first Point the Finger was detected at
+     * @param ellipse the first ellipse that was detected
      */
-    Finger(cv::Point origin);
+    Finger(const cv::RotatedRect& ellipse);
 
 public:
     /**
      * @brief add a new Position to the Finger
      *
-     * @param point the Point at the new position
+     * @param ellipse the Ellipse of the position
      */
-    void addNewPosition(cv::Point point, cv::RotatedRect ellipse);
+    void addNewPosition(cv::RotatedRect ellipse);
 
     /**
      * @brief get the distance from the last point to the given point
@@ -40,7 +42,7 @@ public:
      * @param point the Point to calculate the distance to
      * @return double the distance to the point
      */
-    double getDistanceTo(cv::Point point) const;
+    double getDistanceTo(const cv::Point2f& point) const;
 
     /**
      * @brief Draw the Path and ID of the Image
@@ -55,7 +57,7 @@ public:
      * 
      * @return const cv::Point& the latest Position
      */
-    const cv::Point& lastPosition() const;
+    const cv::Point2f& lastPosition() const;
 
     /**
      * @brief returns the ID of the Finger
@@ -63,6 +65,23 @@ public:
      * @return const uint64_t the ID of the Finger
      */
     const uint64_t id() const;
+
+    /**
+     * @brief Get the Mark value
+     * 
+     * @return const uint8_t the mark value
+     */
+    const uint8_t getAge() const;
+
+    /**
+     * @brief Resets the Mark of the Finger
+     */
+    void resetAge();
+
+    /**
+     * @brief Increments the Age of a Finger
+     */
+    void incrementAge();
 
     /**
      * @brief Cheks if 2 fingers have the same ID
