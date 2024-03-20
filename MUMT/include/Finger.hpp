@@ -6,6 +6,9 @@
 #include <vector>
 #include <functional>
 
+#include "TuioCursor.h"
+#include <stack>
+
 /**
  * @brief Represents a Finger in the Tracking System
  *
@@ -20,6 +23,9 @@ private:
 
     uint8_t mMark = 0;
 
+    TUIO::TuioCursor* mCursor;
+    static std::stack<TUIO::TuioCursor*> smDeadCursors;
+
 public:
     /**
      * @brief Construct a new Finger object
@@ -28,7 +34,20 @@ public:
      */
     Finger(const cv::RotatedRect& ellipse);
 
+    /**
+     * @brief Destroy the Finger object, releasing the Cursor
+     * 
+     */
+    ~Finger();
+
 public:
+    /**
+     * @brief Returns all dead cursors
+     * 
+     * @return std::stack<TUIO::TuioCursor*> stack with dead cursors. Ripe for cleanup.
+     */
+    static std::stack<TUIO::TuioCursor*>& getDeadCursors();
+
     /**
      * @brief add a new Position to the Finger
      *
@@ -100,6 +119,13 @@ public:
      * @return false fingers have the same ID, they should be the same
      */
     bool operator!=(const Finger& other) const;
+
+    /**
+     * @brief Get the current TuioCursor
+     * 
+     * @return std::pair<TUIO::TuioCursor*,bool> the TuioCursor and weather it is new or not
+     */
+    std::pair<TUIO::TuioCursor*, bool> getCursor() const;
 
 };
 

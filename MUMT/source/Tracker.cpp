@@ -1,5 +1,5 @@
-#include <Tracker.hpp>
-#include <Helpers.hpp>
+#include "Tracker.hpp"
+#include "Helpers.hpp"
 
 #include <algorithm>
 #include <numeric>
@@ -131,4 +131,8 @@ Mat Tracker::drawInfo() const {
     }
 
     return image;
+}
+
+const QuadTree& Tracker::getFingers() const {
+    return mFingers;
 }

@@ -1,12 +1,12 @@
 #ifndef TT_QUAD_TREE
 #define TT_QUAD_TREE
+#include "Finger.hpp"
 #include <opencv2/core/types.hpp>
 
 #include <memory>
 #include <array>
 #include <stack>
 #include <optional>
-#include <Finger.hpp>
 
 class QuadTree {
     template<typename T>

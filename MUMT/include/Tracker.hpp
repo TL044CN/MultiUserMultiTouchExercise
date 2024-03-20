@@ -51,6 +51,13 @@ public:
      */
     cv::Mat drawInfo() const;
 
+    /**
+     * @brief Returns the Finger Storage
+     * 
+     * @return const QuadTree& const ref to the finger storage
+     */
+    const QuadTree& getFingers() const;
+
 };
 
 #endif
