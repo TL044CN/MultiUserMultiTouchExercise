@@ -38,7 +38,7 @@ void Finger::draw(cv::Mat& destination) const {
     cv::putText(destination,
         std::to_string(mID),
         mPreviousPoints.back() + cv::Point2f(3, 13),
-        cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 0, 0), 1
+        cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 0, 255), 1
     );
 
 }
