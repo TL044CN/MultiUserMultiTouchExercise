@@ -240,8 +240,6 @@ bool QuadTree::remove(const uniqueRef<Finger>& fingerRef) {
 
 void QuadTree::update(const uniqueRef<Finger>& fingerRef, const cv::RotatedRect& ellipse) {
     auto& finger = fingerRef.get();
-    //check if the finger can be found. if it cannot be found, insert it
-    Quadrant* currentQuadrant = mRoot.get();
 
     DEBUGFNEX("Finding Leaf Node for given Finger");
     auto [quadStack, leaf] = findLeaf(finger, true);
@@ -299,9 +297,6 @@ void QuadTree::update(const uniqueRef<Finger>& fingerRef, const cv::RotatedRect&
                 DEBUGFNEX("Free Quadrants: %i", freeCount);
             }
         }
-
-        // make absolutely sure the data is removed!
-        currentQuadrant->data.reset();
 
         // insert the updated Finger Data back into the quad tree
         insert(std::move(fingerData));
