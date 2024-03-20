@@ -5,7 +5,9 @@
 #include <vector>
 #include <filesystem>
 
-#include <Tracker.hpp>
+#include "Tracker.hpp"
+
+#include "TUIOServerAdapter.hpp"
 
 int main() {
 
@@ -16,6 +18,7 @@ int main() {
         return EXIT_FAILURE;
     }
 
+    TUIOServerAdapter server;
 
     cv::Mat background;
     if(!capture.read(background)) {
@@ -25,9 +28,11 @@ int main() {
 
     Tracker tracker(background);
 
+
     cv::Mat vid_frame;
     while(capture.read(vid_frame)){
         tracker.update(vid_frame);
+        server.transmitFingers(tracker.getFingers());
         cv::imshow("Output",vid_frame + tracker.drawInfo());
         if(cv::waitKey(100) == 27) break;
     }

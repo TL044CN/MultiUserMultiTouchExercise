@@ -1,14 +1,24 @@
-#include <Finger.hpp>
+#include "Finger.hpp"
+#include "Helpers.hpp"
 #include <opencv2/core.hpp>
-#include <Helpers.hpp>
 #include <string>
 
 uint64_t Finger::sMaxID = 0;
+std::stack<TUIO::TuioCursor*> Finger::smDeadCursors;
 
 Finger::Finger(const cv::RotatedRect& ellipse)
     : mID(sMaxID++) {
     mPreviousPoints.push_back(ellipse.center);
     mCurrentEllipse = ellipse;
+    mCursor = new TUIO::TuioCursor(mID, 0, mCurrentEllipse.center.x, mCurrentEllipse.center.y);
+}
+
+Finger::~Finger(){
+    smDeadCursors.push(std::move(mCursor));
+}
+
+std::stack<TUIO::TuioCursor*>& Finger::getDeadCursors() {
+    return smDeadCursors;
 }
 
 void Finger::addNewPosition(cv::RotatedRect ellipse) {
@@ -69,4 +79,11 @@ bool Finger::operator==(const Finger& other) const {
 
 bool Finger::operator!=(const Finger& other) const {
     return mID != other.mID;
+}
+
+std::pair<TUIO::TuioCursor*, bool> Finger::getCursor() const {
+    static bool firstTime = true;
+    std::pair<TUIO::TuioCursor*, bool> result = {mCursor, firstTime};
+    if(firstTime) firstTime = false;
+    return result;
 }

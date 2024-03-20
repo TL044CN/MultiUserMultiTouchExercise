@@ -65,8 +65,8 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE MUMT
-    PRIVATE ${OpenCV_LIBS}
     PRIVATE TUIO
+    PRIVATE ${OpenCV_LIBS}
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD

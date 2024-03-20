@@ -2,7 +2,7 @@
 #define TT_HELPERS_HPP
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
-#include <Finger.hpp>
+#include "Finger.hpp"
 #include <algorithm>
 #include <ranges>
 
