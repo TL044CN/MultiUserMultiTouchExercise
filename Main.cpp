@@ -26,6 +26,9 @@ int main() {
         return EXIT_FAILURE;
     }
 
+    auto [ rows, cols ] = std::pair{background.rows, background.cols};
+    Finger::setWindowSize(cv::Size2f(cols,rows));
+
     Tracker tracker(background);
 
 

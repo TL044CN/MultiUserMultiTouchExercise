@@ -3,7 +3,7 @@
 #include "Helpers.hpp"
 
 TUIOServerAdapter::TUIOServerAdapter()
-    : mServer(std::make_unique<TUIO::TuioServer>()) {
+    : mServer(std::make_unique<TUIO::TuioServer>("localhost",3333)) {
     static bool initSession = true;
     if ( initSession ) {
         TUIO::TuioTime::initSession();
@@ -15,25 +15,29 @@ void TUIOServerAdapter::transmitFingers(const QuadTree& tree) {
     TUIO::TuioTime sessionTime = TUIO::TuioTime::getSessionTime();
     DEBUGFNEX("SessionTime: %lu ms", sessionTime.getTotalMilliseconds());
     mServer->initFrame(sessionTime);
+    
+
     for ( const auto& maybeFingerRef : tree ) {
         if ( !maybeFingerRef.has_value() ) continue;
         auto& finger = maybeFingerRef->get();
-        const auto& [cursor, add] = finger->getCursor();
+        auto [cursor, add] = finger->getCursor();
         if ( add ) {
             mServer->addExternalTuioCursor(cursor);
-            DEBUGFNEX("Adding Finger Cursor");
+            DEBUGFNEX("Adding Cursor %lu", cursor->getSessionID());
         } else {
             mServer->updateExternalTuioCursor(cursor);
-            DEBUGFNEX("Updating Finger Cursor");
+            DEBUGFNEX("Updating Cursor %lu", cursor->getSessionID());
         }
     }
 
     auto& deadStack = Finger::getDeadCursors();
     while ( !deadStack.empty() ) {
-        DEBUGFNEX("Removing Finger Cursor");
-        mServer->removeTuioCursor(deadStack.top());
+        TUIO::TuioCursor* cursor = deadStack.top();
+        DEBUGFNEX("Removing Cursor %lu", cursor->getSessionID());
+        mServer->removeTuioCursor(cursor);
         deadStack.pop();
     }
 
-    mServer->commitFrame();
+//    mServer->commitFrame();
+    mServer->sendFullMessages();
 }

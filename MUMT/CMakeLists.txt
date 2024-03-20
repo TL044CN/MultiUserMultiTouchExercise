@@ -23,4 +23,4 @@ target_link_libraries(MUMT
         TUIO
 )
 
-#add_compile_definitions(DEBUG=1)
+add_compile_definitions(DEBUG=1)

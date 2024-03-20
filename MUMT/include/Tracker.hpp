@@ -8,7 +8,7 @@
 #include <vector>
 
 constexpr double ceMaxFingerDist = 35;
-constexpr uint64_t ceMaxAge = 2;
+constexpr uint64_t ceMaxAge = 1;
 
 /**
  * @brief Core of the Tracking system

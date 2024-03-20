@@ -5,16 +5,26 @@
 
 uint64_t Finger::sMaxID = 0;
 std::stack<TUIO::TuioCursor*> Finger::smDeadCursors;
+cv::Size2f Finger::smWindowSize = {0,0};
 
 Finger::Finger(const cv::RotatedRect& ellipse)
     : mID(sMaxID++) {
     mPreviousPoints.push_back(ellipse.center);
     mCurrentEllipse = ellipse;
-    mCursor = new TUIO::TuioCursor(mID, 0, mCurrentEllipse.center.x, mCurrentEllipse.center.y);
+
+   auto [x,y] = mCurrentEllipse.center;
+    x /= smWindowSize.width;
+    y /= smWindowSize.height;
+
+    mCursor = new TUIO::TuioCursor(mID, 0, x, y);
 }
 
 Finger::~Finger(){
     smDeadCursors.push(std::move(mCursor));
+}
+
+void Finger::setWindowSize(const cv::Size2f& size) {
+    smWindowSize = size;
 }
 
 std::stack<TUIO::TuioCursor*>& Finger::getDeadCursors() {
@@ -81,9 +91,13 @@ bool Finger::operator!=(const Finger& other) const {
     return mID != other.mID;
 }
 
-std::pair<TUIO::TuioCursor*, bool> Finger::getCursor() const {
-    static bool firstTime = true;
-    std::pair<TUIO::TuioCursor*, bool> result = {mCursor, firstTime};
-    if(firstTime) firstTime = false;
+std::pair<TUIO::TuioCursor*, bool> Finger::getCursor() {
+    auto [x,y] = mCurrentEllipse.center;
+    x /= smWindowSize.width;
+    y /= smWindowSize.height;
+
+    mCursor->update(x,y);
+    std::pair<TUIO::TuioCursor*, bool> result = {mCursor, isNew};
+    if(isNew) isNew = false;
     return result;
 }
