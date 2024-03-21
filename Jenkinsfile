@@ -25,19 +25,51 @@ pipeline {
                             label "${PLATFORM}&&${COMPILER}"
                         }
                         stages {
-                            stage('Prepare') {
+                            stage('Update Dependencies') {
                                 steps {
                                     sh '''
-                                    apt install -y libgtk-3-dev
+                                    apt update -y --fix-missing
+                                    apt install -y --fix-missing libgtk-3-dev libopencv-dev
                                     '''
+                                }
+                            }
+                            stage('Download necessary Video File') {
+                                steps {
+                                    script {
+                                        try {
+                                            unstash 'video-file'
+                                            echo "Stashed video retrieved."
+                                        } catch (Exception e) {
+                                            echo "Downloading Video File"
+                                            sh 'mkdir -p figures'
+                                            sh 'curl -o figures/video.avi https://nextcloud.shodan.fyi/s/RyK7teTZ6BqRXYk/download/video.avi'
+                                            stash includes: 'figures/video.avi', name: 'video-file'
+                                        }
+                                    }
                                 }
                             }
                             stage('Build') {
                                 steps {
-                                    sh """
-                                    cmake -B build/ -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
-                                    cmake --build build/ --config=${BUILD_TYPE}
-                                    """
+                                    script {
+                                        try {
+                                            echo "Unstashing build folder and opencv"
+                                            unstash  'vendor-opencv'
+                                            unstash  "build-folder-${PLATFORM}-${COMPILER}"
+                                        } catch (Exception e) {
+                                            echo "opencv or build folder not stashed"
+                                        }
+                                        sh """
+                                        cmake -B build/ -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+                                        cmake --build build/ --config=${BUILD_TYPE}
+                                        """
+                                        stash includes: 'vendor/OpenCV/', name: 'vendor-opencv'
+                                        stash includes: 'build/', name: "build-folder-${PLATFORM}-${COMPILER}"                                        
+                                    }
+                                }
+                            }
+                            stage('Run Tests'){
+                                steps {
+                                  echo 'Currently no tests.'
                                 }
                             }
                         }
