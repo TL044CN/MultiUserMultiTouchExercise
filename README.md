@@ -1,8 +1,11 @@
 <a href='https://jenkins.shodan.fyi/job/MultiUserMultiTouch/'><img src='https://jenkins.shodan.fyi/buildStatus/icon?job=MultiUserMultiTouch'></a>
 # Multi User Multi Touch
 ## About
+A Small Exercise Build for the Multi User Multi Touch compact course at h_da (Hochschule Darmstadt)
 
 ## Dependencies
+- OpenCV (added as submodule)
+- TUIO1.1 (Provided in the source)
 
 ## Build
 to build the Project run:
