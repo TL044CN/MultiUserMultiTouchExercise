@@ -4,6 +4,8 @@
 
 TUIOServerAdapter::TUIOServerAdapter()
     : mServer(std::make_unique<TUIO::TuioServer>("localhost",3333)) {
+    mServer->enableFullUpdate();
+//    mServer->enablePeriodicMessages(1000);
     static bool initSession = true;
     if ( initSession ) {
         TUIO::TuioTime::initSession();
@@ -14,9 +16,9 @@ TUIOServerAdapter::TUIOServerAdapter()
 void TUIOServerAdapter::transmitFingers(const QuadTree& tree) {
     TUIO::TuioTime sessionTime = TUIO::TuioTime::getSessionTime();
     DEBUGFNEX("SessionTime: %lu ms", sessionTime.getTotalMilliseconds());
+
     mServer->initFrame(sessionTime);
     
-
     for ( const auto& maybeFingerRef : tree ) {
         if ( !maybeFingerRef.has_value() ) continue;
         auto& finger = maybeFingerRef->get();
@@ -38,6 +40,6 @@ void TUIOServerAdapter::transmitFingers(const QuadTree& tree) {
         deadStack.pop();
     }
 
-//    mServer->commitFrame();
-    mServer->sendFullMessages();
+    mServer->commitFrame();
+//    mServer->sendFullMessages();
 }
