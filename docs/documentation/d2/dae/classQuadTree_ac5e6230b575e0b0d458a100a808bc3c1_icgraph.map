@@ -1,0 +1,4 @@
+<map id="QuadTree::insert" name="QuadTree::insert">
+<area shape="rect" id="node1" title="Inserts the given Finger into the Quad Tree, transfering ownership." alt="" coords="189,5,317,32"/>
+<area shape="rect" id="node2" href="$d2/dae/classQuadTree.html#a5c7ff72b667e1fb0e18e6a18ad1c3430" title="Updates the given Fingers position with the Ellipse." alt="" coords="5,5,141,32"/>
+</map>

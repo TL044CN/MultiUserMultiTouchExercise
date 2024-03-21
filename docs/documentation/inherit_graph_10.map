@@ -1,0 +1,13 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$db/de6/classosc_1_1MissingArgumentException.html" title=" " alt="" coords="5,223,236,250"/>
+<area shape="rect" id="node2" href="$dd/dd4/classosc_1_1Exception.html" title=" " alt="" coords="284,223,400,250"/>
+<area shape="rect" id="node3" href="$d4/dea/classosc_1_1BundleNotInProgressException.html" title=" " alt="" coords="480,5,668,47"/>
+<area shape="rect" id="node4" href="$d9/da5/classosc_1_1ExcessArgumentException.html" title=" " alt="" coords="461,71,687,98"/>
+<area shape="rect" id="node5" href="$d9/d6d/classosc_1_1MalformedBundleException.html" title=" " alt="" coords="458,122,690,149"/>
+<area shape="rect" id="node6" href="$d5/d58/classosc_1_1MalformedMessageException.html" title=" " alt="" coords="451,173,697,199"/>
+<area shape="rect" id="node7" href="$df/d36/classosc_1_1MalformedPacketException.html" title=" " alt="" coords="459,223,689,250"/>
+<area shape="rect" id="node8" href="$d4/d02/classosc_1_1MessageInProgressException.html" title=" " alt="" coords="453,274,695,301"/>
+<area shape="rect" id="node9" href="$d4/d21/classosc_1_1MessageNotInProgressException.html" title=" " alt="" coords="473,325,675,367"/>
+<area shape="rect" id="node10" href="$d9/d9f/classosc_1_1OutOfBufferMemoryException.html" title=" " alt="" coords="451,391,697,418"/>
+<area shape="rect" id="node11" href="$df/d1e/classosc_1_1WrongArgumentTypeException.html" title=" " alt="" coords="448,442,700,469"/>
+</map>
