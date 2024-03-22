@@ -42,7 +42,7 @@ pipeline {
                             stage('Update Dependencies') {
                                 steps {
                                     sh '''
-                                    apt install -y --fix-missing libgtk-3-dev libopencv-dev
+                                    apt install -y --fix-missing libgtk-3-dev libopencv-dev npm nodejs
                                     '''
                                 }
                             }
