@@ -2,8 +2,8 @@ import { Bundle, ArgumentType, Server } from 'node-osc'
 import { EventEmitter } from 'events'
 
 export interface Vec2 {
-    x: number
-    y: number
+    X: number
+    Y: number
 }
 
 export interface Cursor2D {
@@ -47,8 +47,8 @@ export class OSCReceiver extends EventEmitter {
                         case 'set':
                             cursor = <Cursor2D>{
                                 sessionID: message[2] as number,
-                                position: <Vec2>{ x: message[3] as number, y: message[4] as number },
-                                velocity: <Vec2>{ x: message[5] as number, y: message[6] as number },
+                                position: <Vec2>{ X: message[3] as number, Y: message[4] as number },
+                                velocity: <Vec2>{ X: message[5] as number, Y: message[6] as number },
                                 accelleration: message[7] as number
                             }
 

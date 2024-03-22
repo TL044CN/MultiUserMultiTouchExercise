@@ -21,10 +21,21 @@ export class OSCManager extends EventEmitter {
     }
 
     private handleAliveCursor(ids: number[]): void {
+
+        let finished: Map<number, Cursor2D[]> = new Map;
+
+        const removedEntries = [...this.mCursors.entries()].filter(([key]) => !ids.includes(key));
+
+        removedEntries.forEach(([key, value]) => {
+            finished.set(key, value);
+            this.mCursors.delete(key);
+        });
+/*        
         this.mCursors = new Map<number, Cursor2D[]>(
             [...this.mCursors.entries()].filter(([key]) => ids.includes(key))
         );
-        this.emit("update", this.mCursors);
+*/
+        this.emit("update", this.mCursors, finished);
     }
 
     private handleSetCursor(cursor: Cursor2D): void {
@@ -33,6 +44,7 @@ export class OSCManager extends EventEmitter {
         }
 
         (this.mCursors.get(cursor.sessionID) as Cursor2D[]).push(cursor)
+        this.emit("setCursor", cursor);
     }
 
     get activeCursors(): Map<number,Cursor2D[]> {
