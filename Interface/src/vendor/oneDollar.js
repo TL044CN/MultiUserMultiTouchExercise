@@ -150,39 +150,39 @@ function DollarRecognizer() // constructor
 	{
 		var t0 = Date.now();
 		var candidate = new Unistroke("", points);
-
+		
 		var u = -1;
 		var b = +Infinity;
 		for (var i = 0; i < this.Unistrokes.length; i++) // for each unistroke template
 		{
 			var d;
 			if (useProtractor)
-				d = OptimalCosineDistance(this.Unistrokes[i].Vector, candidate.Vector); // Protractor
-			else
-				d = DistanceAtBestAngle(candidate.Points, this.Unistrokes[i], -AngleRange, +AngleRange, AnglePrecision); // Golden Section Search (original $1)
-			if (d < b) {
-				b = d; // best (least) distance
-				u = i; // unistroke index
-			}
-		}
-		var t1 = Date.now();
-		return (u == -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.Unistrokes[u].Name, useProtractor ? (1.0 - b) : (1.0 - b / HalfDiagonal), t1-t0);
+			d = OptimalCosineDistance(this.Unistrokes[i].Vector, candidate.Vector); // Protractor
+		else
+		d = DistanceAtBestAngle(candidate.Points, this.Unistrokes[i], -AngleRange, +AngleRange, AnglePrecision); // Golden Section Search (original $1)
+	if (d < b) {
+		b = d; // best (least) distance
+		u = i; // unistroke index
 	}
-	this.AddGesture = function(name, points)
-	{
-		this.Unistrokes[this.Unistrokes.length] = new Unistroke(name, points); // append new unistroke
-		var num = 0;
-		for (var i = 0; i < this.Unistrokes.length; i++) {
-			if (this.Unistrokes[i].Name == name)
-				num++;
-		}
-		return num;
-	}
-	this.DeleteUserGestures = function()
-	{
-		this.Unistrokes.length = NumUnistrokes; // clear any beyond the original set
-		return NumUnistrokes;
-	}
+}
+var t1 = Date.now();
+return (u == -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.Unistrokes[u].Name, useProtractor ? (1.0 - b) : (1.0 - b / HalfDiagonal), t1-t0);
+}
+this.AddGesture = function(name, points)
+{
+	this.Unistrokes[this.Unistrokes.length] = new Unistroke(name, points); // append new unistroke
+	var num = 0;
+	for (var i = 0; i < this.Unistrokes.length; i++) {
+		if (this.Unistrokes[i].Name == name)
+		num++;
+}
+return num;
+}
+this.DeleteUserGestures = function()
+{
+	this.Unistrokes.length = NumUnistrokes; // clear any beyond the original set
+	return NumUnistrokes;
+}
 }
 //
 // Private helper functions from here on down
@@ -207,7 +207,7 @@ function Resample(points, n)
 		else D += d;
 	}
 	if (newpoints.length == n - 1) // somtimes we fall a rounding-error short of adding the last point, so add it if so
-		newpoints[newpoints.length] = new Point(points[points.length - 1].X, points[points.length - 1].Y);
+	newpoints[newpoints.length] = new Point(points[points.length - 1].X, points[points.length - 1].Y);
 	return newpoints;
 }
 function IndicativeAngle(points)
@@ -261,8 +261,8 @@ function Vectorize(points) // for Protractor
 	}
 	var magnitude = Math.sqrt(sum);
 	for (var i = 0; i < vector.length; i++)
-		vector[i] /= magnitude;
-	return vector;
+	vector[i] /= magnitude;
+return vector;
 }
 function OptimalCosineDistance(v1, v2) // for Protractor
 {
@@ -330,15 +330,15 @@ function PathDistance(pts1, pts2)
 {
 	var d = 0.0;
 	for (var i = 0; i < pts1.length; i++) // assumes pts1.length == pts2.length
-		d += Distance(pts1[i], pts2[i]);
+	d += Distance(pts1[i], pts2[i]);
 	return d / pts1.length;
 }
 function PathLength(points)
 {
 	var d = 0.0;
 	for (var i = 1; i < points.length; i++)
-		d += Distance(points[i - 1], points[i]);
-	return d;
+	d += Distance(points[i - 1], points[i]);
+return d;
 }
 function Distance(p1, p2)
 {
@@ -347,3 +347,6 @@ function Distance(p1, p2)
 	return Math.sqrt(dx * dx + dy * dy);
 }
 function Deg2Rad(d) { return (d * Math.PI / 180.0); }
+
+
+module.exports = { "DollarRecognizer": DollarRecognizer}
