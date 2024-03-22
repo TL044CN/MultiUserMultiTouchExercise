@@ -72,3 +72,7 @@ target_link_libraries(${PROJECT_NAME}
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/figures $<TARGET_FILE_DIR:${PROJECT_NAME}>/figures
 )
+
+add_custom_target(Interface ALL
+    COMMAND cd ${PROJECT_SOURCE_DIR}/Interface && npm install && npm run compile
+)
