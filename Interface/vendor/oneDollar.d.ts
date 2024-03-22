@@ -1,14 +1,14 @@
 /// <reference types="node" />
 
-const NumUnistrokes: number
-const NumPoints: number
-const SquareSize: number
-const Origin: number
-const Diagonal: number
-const HalfDiagonal: number
-const AngleRange: number
-const AnglePrecision: number
-const Phi: number
+declare const NumUnistrokes: number
+declare const NumPoints: number
+declare const SquareSize: number
+declare const Origin: number
+declare const Diagonal: number
+declare const HalfDiagonal: number
+declare const AngleRange: number
+declare const AnglePrecision: number
+declare const Phi: number
 
 export interface Point {
     X: number

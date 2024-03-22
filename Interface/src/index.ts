@@ -5,8 +5,6 @@ import path from 'path';
 import { OSCManager } from './oscManager';
 import { Cursor2D } from './oscReceiver';
 
-import '../vendor/oneDollar';
-
 async function init(): Promise<[OSCManager, any[]]> {
     return Promise.all([
         new Promise<OSCManager>((resolve) => {
