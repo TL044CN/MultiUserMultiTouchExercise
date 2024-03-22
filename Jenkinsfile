@@ -84,14 +84,9 @@ pipeline {
                             stage('Archiving Artifacts') {
                                 steps {
                                     sh 'mv build "build-${PLATFORM}-${COMPILER}"'
-                                    archiveArtifacts (
-                                        artifacts: [
-                                            'figures/video.avi',
-                                            'vendor/OpenCV/',
-                                            "build-${PLATFORM}-${COMPILER}/"
-                                        ],
-                                        allowEmptyArchive: true, onlyIfSuccessful: true, fingerprint: true
-                                    )
+                                    archiveArtifacts (artifacts: 'figures/video.avi', allowEmptyArchive: true, onlyIfSuccessful: true, fingerprint: true)
+                                    archiveArtifacts (artifacts: 'vendor/OpenCV/', allowEmptyArchive: true, onlyIfSuccessful: true, fingerprint: true)
+                                    archiveArtifacts (artifacts: "build-${PLATFORM}-${COMPILER}/", allowEmptyArchive: true, onlyIfSuccessful: true, fingerprint: true)
                                 }
                             }
                         }
