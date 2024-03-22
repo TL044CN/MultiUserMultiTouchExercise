@@ -5,8 +5,7 @@ import path from 'path';
 import { OSCManager } from './oscManager';
 import { Cursor2D } from './oscReceiver';
 
-import { DollarRecognizer } from './vendor/oneDollar'
-import { Result as Gesture } from './vendor/oneDollar'
+import { DollarRecognizer, Result as Gesture } from './vendor/oneDollar'
 import { Point } from 'build/vendor/oneDollar';
 
 const recognizer = new DollarRecognizer
@@ -25,7 +24,7 @@ async function main() {
     const [manager, _] = await init()
 
     const mainWindow = await new Promise<BrowserWindow>((resolve) => {
-        const mainWindow = new BrowserWindow({ width: 600, height: 400 })
+        const mainWindow = new BrowserWindow({ width: 1600, height: 900 })
 
         const indexHTML = path.join(`${__dirname}/resources/index.html`)
         mainWindow.loadFile(indexHTML).finally(() => resolve(mainWindow))
@@ -64,7 +63,7 @@ const dynamicTableBody = `\
 `
 
         content.executeJavaScript(`\
-document.getElementById('finger_table_wrapper').innerHTML = '${dynamicTableBody}';
+document.getElementById('table_wrapper').innerHTML = '${dynamicTableBody}';
         `);
 
     })
