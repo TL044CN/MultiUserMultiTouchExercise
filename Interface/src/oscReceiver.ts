@@ -1,15 +1,15 @@
 import { Bundle, ArgumentType, Server } from 'node-osc'
 import { EventEmitter } from 'events'
 
-export interface vec2 {
+export interface Vec2 {
     x: number
     y: number
 }
 
 export interface Cursor2D {
     sessionID: number
-    position: vec2
-    velocity: vec2
+    position: Vec2
+    velocity: Vec2
     accelleration: number
 }
 
@@ -32,22 +32,23 @@ export class OSCReceiver extends EventEmitter {
     }
 
     private handleBundle(bundle: Bundle): void {
-        for (var element of bundle.elements) {
+        for (const element of bundle.elements) {
 
-            var message = ((element as unknown) as [string, ...ArgumentType[]]);
+            const message = ((element as unknown) as [string, ...ArgumentType[]]);
 
             if (message === undefined) continue;
 
+            var eventName: string;
             switch (message[0]) {
                 case '/tuio/2Dcur':
-                    var eventName: string = `${message[1] as string}Cursor`;
-                    var cursor: any;
+                    eventName = `${message[1] as string}Cursor`
+                    let cursor: any;
                     switch (message[1]) {
                         case 'set':
                             cursor = <Cursor2D>{
                                 sessionID: message[2] as number,
-                                position: <vec2>{ x: message[3] as number, y: message[4] as number },
-                                velocity: <vec2>{ x: message[5] as number, y: message[6] as number },
+                                position: <Vec2>{ x: message[3] as number, y: message[4] as number },
+                                velocity: <Vec2>{ x: message[5] as number, y: message[6] as number },
                                 accelleration: message[7] as number
                             }
 
