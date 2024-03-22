@@ -21,7 +21,6 @@ export class OSCManager extends EventEmitter {
     }
 
     private handleAliveCursor(ids: number[]): void {
-//        this.mCursors.filter(cursor => ids.includes(cursor.sessionID));
         this.emit("update", this.mCursors);
         this.mCursors = [];
     }

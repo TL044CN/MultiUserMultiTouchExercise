@@ -2,6 +2,20 @@
 pipeline {
     agent none
     stages {
+        stage('initialize submodules') {
+            agent any
+            steps {
+                script {
+                    sh 'git submodule update --init --recursive'
+                    if (fileExists('vendor/OpenCV')) {
+                        stash name: "vendor", includes: 'vendor/OpenCV/**'
+                    } else {
+                        echo 'vendor/OpenCV directory not found.'
+                        currentBuild.result = 'UNSTABLE'
+                    }
+                }
+            }
+        }
         stage('Build') {
             matrix {
                 axes {
@@ -28,48 +42,51 @@ pipeline {
                             stage('Update Dependencies') {
                                 steps {
                                     sh '''
-                                    apt update -y --fix-missing
                                     apt install -y --fix-missing libgtk-3-dev libopencv-dev
                                     '''
                                 }
                             }
-                            stage('Download necessary Video File') {
+                            stage('Retrieving Artifacts') {
                                 steps {
-                                    script {
+                                    script{
                                         try {
-                                            unstash 'video-file'
-                                            echo "Stashed video retrieved."
+                                            unstash 'vendor'
+                                        } catch(Exception e) {
+
+                                        }
+                                        try {
+                                            unarchive (mapping: [
+                                                'figures/video.avi': 'figures/video.avi',
+                                                'vendor/OpenCV': 'vendor/OpenCV',
+                                                "build-${PLATFORM}-${COMPILER}/": "build"
+                                            ])
+                                            artifactsRetrieved = true
                                         } catch (Exception e) {
-                                            echo "Downloading Video File"
                                             sh 'mkdir -p figures'
                                             sh 'curl -o figures/video.avi https://nextcloud.shodan.fyi/s/RyK7teTZ6BqRXYk/download/video.avi'
-                                            stash includes: 'figures/video.avi', name: 'video-file'
                                         }
                                     }
                                 }
                             }
                             stage('Build') {
                                 steps {
-                                    script {
-                                        try {
-                                            echo "Unstashing build folder and opencv"
-                                            unstash  'vendor-opencv'
-                                            unstash  "build-folder-${PLATFORM}-${COMPILER}"
-                                        } catch (Exception e) {
-                                            echo "opencv or build folder not stashed"
-                                        }
-                                        sh """
-                                        cmake -B build/ -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
-                                        cmake --build build/ --config=${BUILD_TYPE}
-                                        """
-                                        stash includes: 'vendor/OpenCV/', name: 'vendor-opencv'
-                                        stash includes: 'build/', name: "build-folder-${PLATFORM}-${COMPILER}"                                        
-                                    }
+                                    sh """
+                                    cmake -B build/ -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+                                    cmake --build build/ --config=${BUILD_TYPE}
+                                    """
                                 }
                             }
                             stage('Run Tests'){
                                 steps {
                                   echo 'Currently no tests.'
+                                }
+                            }
+                            stage('Archiving Artifacts') {
+                                steps {
+                                    sh 'mv build "build-${PLATFORM}-${COMPILER}"'
+                                    archiveArtifacts (artifacts: 'figures/video.avi', allowEmptyArchive: true, onlyIfSuccessful: true, fingerprint: true)
+                                    archiveArtifacts (artifacts: 'vendor/OpenCV/', allowEmptyArchive: true, onlyIfSuccessful: true, fingerprint: true)
+                                    archiveArtifacts (artifacts: "build-${PLATFORM}-${COMPILER}/", allowEmptyArchive: true, onlyIfSuccessful: true, fingerprint: true)
                                 }
                             }
                         }
