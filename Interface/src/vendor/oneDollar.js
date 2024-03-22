@@ -334,4 +334,8 @@ function Distance(p1, p2) {
 function Deg2Rad(d) { return (d * Math.PI / 180.0); }
 
 
-module.exports = { "DollarRecognizer": DollarRecognizer }
+module.exports = {
+	"DollarRecognizer": DollarRecognizer,
+	"Centroid" : Centroid,
+	"BoundingBox": BoundingBox
+}
