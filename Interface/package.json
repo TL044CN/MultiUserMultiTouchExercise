@@ -4,7 +4,7 @@
   "author": "TL044CN tl044cn@shodan.fyi",
   "main": "build/index.js",
   "scripts": {
-    "compile": "tsc && copyfiles -f resources/* build/resources",
+    "compile": "tsc && copyfiles -f resources/* build/resources && copyfiles -f src/vendor/*.js build/vendor",
     "start": "npm run compile && electron build/"
   },
   "devDependencies": {

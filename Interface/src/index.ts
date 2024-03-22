@@ -5,6 +5,12 @@ import path from 'path';
 import { OSCManager } from './oscManager';
 import { Cursor2D } from './oscReceiver';
 
+import { DollarRecognizer } from './vendor/oneDollar'
+import { Result as Gesture } from './vendor/oneDollar'
+import { Point } from 'build/vendor/oneDollar';
+
+const recognizer = new DollarRecognizer
+
 async function init(): Promise<[OSCManager, any[]]> {
     return Promise.all([
         new Promise<OSCManager>((resolve) => {
@@ -18,47 +24,37 @@ async function init(): Promise<[OSCManager, any[]]> {
 async function main() {
     const [manager, _] = await init()
 
-    const mainWindow = await new Promise<BrowserWindow>(async (resolve) => {
+    const mainWindow = await new Promise<BrowserWindow>((resolve) => {
         const mainWindow = new BrowserWindow({ width: 600, height: 400 })
 
         const indexHTML = path.join(`${__dirname}/resources/index.html`)
-        await mainWindow.loadFile(indexHTML)
+        mainWindow.loadFile(indexHTML).finally(() => resolve(mainWindow))
 
-        resolve(mainWindow)
     })
 
 
-    manager.on("update", (cursors :Cursor2D[]) => {
+    manager.on("update", (cursors: Map<number,Cursor2D[]>) => {
         const content = mainWindow.webContents;
+        let tableData: string = "";
 
-        var tableData: string;
+        let gestures: Gesture[] = new Array<Gesture>;
 
-        if(cursors.length <= 0) {
-            tableData = "";
-        } else {
-            tableData = cursors.map(cursor => `\
-<tr>\
-    <td>${cursor.sessionID}</td>\
-    <td>${cursor.position.x}</td>\
-    <td>${cursor.position.y}</td>\
-    <td>${cursor.velocity.x}</td>\
-    <td>${cursor.velocity.y}</td>\
-    <td>${cursor.accelleration}</td>\
-</tr>\
-`).join('')
+        for(const [_, cursorArray] of cursors) {
+            const pointsArray: Point[] = cursorArray.map(cursor => ({ X: cursor.position.x, Y: cursor.position.y }));
+            gestures.push(recognizer.Recognize(pointsArray))
         }
 
+        for(const gesture of gestures) {
+            tableData += `\
+            <tr><td>${gesture.Name}</td><td>${gesture.Score}</td></tr>`
+        }
 
-        const dynamicTableBody = `\
+const dynamicTableBody = `\
 <table>\
     <thead>\
         <tr>\
-            <th>ID</th>\
-            <th>Position X</td>\
-            <td>Position Y</td>\
-            <th>Velocity X</td>\
-            <td>Velocity Y</td>\
-            <th>Accelleration</th>\
+            <th>Gesture</th>\
+            <th>Score</th>\
         <tr>\
     </thead>\
     <tbody>\
