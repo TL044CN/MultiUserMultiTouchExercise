@@ -1,6 +1,6 @@
 {
   "name": "tt-toly-emt",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "TL044CN tl044cn@shodan.fyi",
   "main": "build/index.js",
   "scripts": {
