@@ -5,9 +5,7 @@ import path from 'path';
 import { OSCManager } from './oscManager';
 import { Cursor2D, Vec2 } from './oscReceiver';
 
-import { BoundingBox, Centroid, DollarRecognizer, Result as Gesture } from './vendor/oneDollar'
-import { Point, Rectangle } from 'build/vendor/oneDollar';
-import { isIdentifier } from 'typescript';
+import { BoundingBox, Centroid, DollarRecognizer, Result as Gesture, Point, Rectangle} from './vendor/oneDollar'
 
 const recognizer = new DollarRecognizer
 
